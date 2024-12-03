@@ -1,0 +1,49 @@
+export const handler = async (event) => {
+  console.log("Received event: ", JSON.stringify(event, null, 2));
+
+  const token = process.env.TelegramToken;
+  const chatId = process.env.TelegramChatID;
+
+  // Kontrollera att event har de rätta fälten
+  if (!event || !event.clientId || !event.eventType) {
+    console.error("Invalid event structure:", event);
+    return {
+      statusCode: 400,
+      body: JSON.stringify("Invalid event structure"),
+    };
+  }
+
+  // Filtrera endast för "connected" och "disconnected"
+  if (event.eventType !== "connected" && event.eventType !== "disconnected") {
+    console.log(`Ignoring eventType: ${event.eventType}`);
+    return {
+      statusCode: 200,
+      body: JSON.stringify("Event ignored"),
+    };
+  }
+
+  // Skapa notifieringsmeddelandet
+  const message = `${event.clientId} was ${event.eventType}!`;
+  const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+  try {
+    const r = await fetch(url);
+
+    if (r.ok) {
+      console.log("Notification sent successfully:", message);
+      return { statusCode: 200, body: JSON.stringify("Success") };
+    } else {
+      console.error("Failed to send notification:", r.status, await r.text());
+      return {
+        statusCode: r.status,
+        body: JSON.stringify("Failed to send notification"),
+      };
+    }
+  } catch (error) {
+    console.error("Error sending notification:", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify("Internal Server Error"),
+    };
+  }
+};
