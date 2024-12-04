@@ -134,13 +134,40 @@ Projektet är designat för att möta behovet av realtidsövervakning av inomhus
 ## **Flödesschema**
 ![Flöde](Images/FlödeDiagram.png)
 
-
+---
 
 ## **Säkerhet och Skalbarhet**
 
-- **Säkerhet**: Användning av **TLS-kryptering** och **X.509-certifikat** för säker kommunikation och autentisering.
-- **Skalbarhet**: Systemet skalar automatiskt via **AWS IoT Core** och **DynamoDB**, vilket gör det enkelt att hantera fler enheter och data.
+
+- **Säkerhet**:  
+  Lösningen implementerar flera säkerhetsåtgärder för att skydda data och kommunikation.  
+  - **TLS-kryptering** används för säker dataöverföring mellan enheter och molntjänster.  
+  - **X.509-certifikat** används för att autentisera enheter, vilket förhindrar obehörig åtkomst.  
+  - **IAM Policies och AWS IoT Rules** är konfigurerade för att styra vilka enheter och användare som har åtkomst till specifika resurser, samt för att begränsa datatrafik till fördefinierade ämnen (topics).  
+  - Datan lagras säkert i AWS DynamoDB med kryptering aktiverad och är endast åtkomlig via reglerade API-anrop. 
+ 
+- **Skalbarhet**:  
+  Systemet är byggt för att kunna växa med antalet enheter och data utan att förlora funktionalitet eller säkerhet.  
+  - **AWS IoT Core** kan hantera tusentals anslutna enheter samtidigt.  
+  - **DynamoDB** skalar horisontellt, vilket innebär att ökade datamängder inte påverkar prestandan.  
+  - Visualisering i **Grafana** kan enkelt utökas för att inkludera fler datakällor och dashboards.  
+  - Policies och regler gör det möjligt att hantera och övervaka många sensorer och enheter effektivt.  
+
+- **Människocentrerad design**: Projektet adresserar behovet av tillgänglig och pålitlig klimatövervakning. Det kan användas i växthus för att skydda växter eller i bostäder för att säkerställa ett behagligt och hälsosamt inomhusklimat.
+
+
+
+### Resonemang:
+**Hög säkerhet uppnås** genom att kombinera kryptering, stark autentisering och noggrann åtkomstkontroll med hjälp av policies och regler. **Skalbarheten** säkerställs genom molntjänster som dynamiskt hanterar ökade datamängder och fler enheter utan att kompromissa med prestanda eller säkerhet.
+
+---
 
 ## **Slutsats**
 
-Projektet demonstrerar en effektiv och säker lösning för att samla in, lagra och visualisera sensorinformation i realtid. Genom att använda AWS-tjänster och Grafana säkerställs både pålitlig datahantering och användarvänlig visualisering. Systemet är skalbart och kan enkelt anpassas för framtida utvidgningar.
+Projektet demonstrerar en effektiv och säker lösning för att samla in, lagra och visualisera sensorinformation i realtid. Genom att använda **AWS IoT Core** för enhetskommunikation, **DynamoDB** för säker och skalbar lagring av sensorvärden och **Grafana** för användarvänlig visualisering, säkerställs både pålitlig datahantering och intuitiv övervakning.
+
+För lagring av sensorvärden som temperatur och luftfuktighet valdes **DynamoDB** på grund av dess förmåga att hantera små, frekventa datapunkter med snabb åtkomst, vilket är avgörande för realtidsapplikationer. **Amazon S3**, som är mer lämpad för lagring av stora filer och ostrukturerad data, skulle inte ha uppfyllt projektets krav på snabb och frekvent åtkomst till små datamängder.
+
+Lösningen är skalbar, vilket gör det möjligt att enkelt utöka systemet med fler sensorer eller enheter vid behov. Systemet kan även enkelt anpassas för framtida utvidgningar eller förändrade krav, vilket gör det till en flexibel och långsiktig lösning för klimatövervakning och andra IoT-tillämpningar.
+
+
