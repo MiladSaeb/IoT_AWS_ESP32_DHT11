@@ -11,7 +11,6 @@
 ---
 ## Introduktion
 Detta projekt samlar in data från en DHT11-sensor via en ESP32-enhet. Sensordata (temperatur och luftfuktighet) skickas till AWS IoT Core för vidare hantering. Datan lagras i DynamoDB och visualiseras i realtid i Grafana. Vid statusändringar (ansluten/frånkopplad) skickas notifikationer via Telegram.
-
 Projektet är designat för att möta behovet av realtidsövervakning av inomhusklimat, exempelvis i växthus, bostäder eller kontor. Fokus har lagts på säkerhet, tillgänglighet och enkel hantering av data. Systemet är skalbart och kan anpassas för fler sensorer eller integration med andra IoT-enheter.
 
 --- 
